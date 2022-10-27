@@ -79,7 +79,7 @@ fi
 # linking to system libraries (like GDBM, which is GPL). An
 # alternative is to pass -Dusecrosscompile but that prevents
 # all Configure/run checks which we also do not want.
-_config_args+=(“-Dsysroot=${CONDA_BUILD_SYSROOT}“)
+_config_args+=("-Dsysroot=${CONDA_BUILD_SYSROOT}")
 
 _config_args+=(
   -Dmyhostname=conda
