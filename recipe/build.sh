@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if [[ "${build_platform}" == osx-64 && "${target_platform}" == osx-arm64 ]]; then
-  archflags="-arch x86_64 -arch arm64"
-  export MACOSX_DEPLOYMENT_TARGET=10.9
-fi
-
 if [[ "${target_platform}" == osx-* ]]; then
   if [[ "${target_platform}" == osx-64 ]]; then
     CFLAGS="${CFLAGS} -D_DARWIN_FEATURE_CLOCK_GETTIME=0"
@@ -79,7 +74,19 @@ fi
 # linking to system libraries (like GDBM, which is GPL). An
 # alternative is to pass -Dusecrosscompile but that prevents
 # all Configure/run checks which we also do not want.
-_config_args+=("-Dsysroot=${CONDA_BUILD_SYSROOT}")
+# -Dsysroot prevents Configure rummaging around in /usr and
+# linking to system libraries (like GDBM, which is GPL). An
+# alternative is to pass -Dusecrosscompile but that prevents
+# all Configure/run checks which we also do not want.
+if [[ -n ${CONDA_BUILD_SYSROOT} ]]; then
+ _config_args+=(“-Dsysroot=${CONDA_BUILD_SYSROOT}“)
+else
+ if [[ -n ${HOST} ]] && [[ -n ${CC} ]]; then
+  _config_args+=(“-Dsysroot=$(dirname $(dirname ${CC}))/$(${CC} -dumpmachine)/sysroot”)
+ else
+  _config_args+=(“-Dsysroot=${CONDA_BUILD_SYSROOT}/usr”)
+ fi
+fi
 
 _config_args+=(
   -Dmyhostname=conda
