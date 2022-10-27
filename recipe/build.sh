@@ -67,7 +67,8 @@ if [[ -n "${AR}" ]]; then
 fi
 if [[ "${target_platform}" == linux-* ]]; then
   _config_args+=(-Dlddlflags="-shared ${LDFLAGS}")
-# elif [[ "${target_platform}" == osx-* ]]; then
+elif [[ "${target_platform}" == osx-* ]]; then
+  _config_args+=(-Dsed=/usr/bin/sed)
 #   _config_args+=(-Dlddlflags=" -bundle -undefined dynamic_lookup ${LDFLAGS}")
 fi
 # -Dsysroot prevents Configure rummaging around in /usr and
@@ -78,15 +79,7 @@ fi
 # linking to system libraries (like GDBM, which is GPL). An
 # alternative is to pass -Dusecrosscompile but that prevents
 # all Configure/run checks which we also do not want.
-if [[ -n ${CONDA_BUILD_SYSROOT} ]]; then
- _config_args+=(“-Dsysroot=${CONDA_BUILD_SYSROOT}“)
-else
- if [[ -n ${HOST} ]] && [[ -n ${CC} ]]; then
-  _config_args+=(“-Dsysroot=$(dirname $(dirname ${CC}))/$(${CC} -dumpmachine)/sysroot”)
- else
-  _config_args+=(“-Dsysroot=${CONDA_BUILD_SYSROOT}/usr”)
- fi
-fi
+_config_args+=(“-Dsysroot=${CONDA_BUILD_SYSROOT}“)
 
 _config_args+=(
   -Dmyhostname=conda
