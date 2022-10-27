@@ -102,10 +102,6 @@ make
 # change permissions again after building
 chmod -R o-w "${SRC_DIR}"
 
-# Seems we hit:
-# lib/perlbug .................................................... # Failed test 21 - [perl \#128020] long body lines are wrapped: maxlen 1157 at ../lib/perlbug.t line 154
-# FAILED at test 21
-# https://rt.perl.org/Public/Bug/Display.html?id=128020
 make test
 make install
 
