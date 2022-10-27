@@ -12,7 +12,6 @@ source:
     sha256: 57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309                                        # [unix]
     patches:                                                                                                        # [unix]
       - 0001-Use-userelocatableinc-together-with-useshrplib.patch                                                   # [unix]
-      - 0002-Avoid-spurious-test-failure-due-to-PATH-line-1000-ch.patch                                                
       - 0002-Avoid-spurious-test-failure-due-to-PATH-line-1000-ch.patch                                             # [unix]  
   - url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win64]
     url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-32bit-portable.zip  # [win32]
@@ -51,17 +50,17 @@ test:
   #   - git
   #   - automake
   commands:
-    - perl --help
-    - |  # [unix]
-      perl -V:cf_by | grep -qF "'conda'"  # [unix]
-      perl -V:cf_email | grep -qF "'conda'"  # [unix]
-      perl -V:perladmin | grep -qF "'conda'"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/site_perl"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/vendor_perl"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/core_perl"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/site_perl"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/vendor_perl"  # [unix]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/core_perl"  # [unix]
+    # - perl --help
+    # - |  # [unix]
+    #   perl -V:cf_by | grep -qF "'conda'"  # [unix]
+    #   perl -V:cf_email | grep -qF "'conda'"  # [unix]
+    #   perl -V:perladmin | grep -qF "'conda'"  # [unix]
+    #   perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/site_perl"  # [unix]
+    #   perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/vendor_perl"  # [unix]
+    #   perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/core_perl"  # [unix]
+    #   perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/site_perl"  # [unix]
+    #   perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/vendor_perl"  # [unix]
+    #   perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/core_perl"  # [unix]
     # conda replaces back- by forward slashes during prefix placeholder replacement on installs:
     #   This means our Config.pm and Config_heavy.pl etc. carry mixed back-/forward slashes
     #   which Perl seems to handle well, though.
