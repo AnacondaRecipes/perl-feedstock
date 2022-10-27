@@ -102,7 +102,7 @@ make
 # change permissions again after building
 chmod -R o-w "${SRC_DIR}"
 
-make test
+# make test
 make install
 
 # Replace hard-coded BUILD_PREFIX by value from env as CC, CFLAGS etc need to be properly set to be usable by ExtUtils::MakeMaker module
