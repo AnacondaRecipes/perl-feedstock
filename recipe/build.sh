@@ -106,7 +106,7 @@ chmod -R o-w "${SRC_DIR}"
 # lib/perlbug .................................................... # Failed test 21 - [perl \#128020] long body lines are wrapped: maxlen 1157 at ../lib/perlbug.t line 154
 # FAILED at test 21
 # https://rt.perl.org/Public/Bug/Display.html?id=128020
-# make test
+make test
 make install
 
 # Replace hard-coded BUILD_PREFIX by value from env as CC, CFLAGS etc need to be properly set to be usable by ExtUtils::MakeMaker module
