@@ -13,6 +13,7 @@ source:
     patches:                                                                                                        # [unix]
       - 0001-Use-userelocatableinc-together-with-useshrplib.patch                                                   # [unix]
       - 0002-Avoid-spurious-test-failure-due-to-PATH-line-1000-ch.patch                                                
+      - 0002-Avoid-spurious-test-failure-due-to-PATH-line-1000-ch.patch                                             # [unix]  
   - url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win64]
     url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-32bit-portable.zip  # [win32]
     sha1: fac226b31461f2392702822052a3a5628917f857                                                                  # [win64]
