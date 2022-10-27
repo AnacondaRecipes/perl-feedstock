@@ -51,7 +51,7 @@ test:
   #   - automake
   commands:
     - perl --help
-    # - |  # [unix]
+    - |  # [unix]
       perl -V:cf_by | grep -qF "'conda'"  # [unix]
       perl -V:cf_email | grep -qF "'conda'"  # [unix]
       perl -V:perladmin | grep -qF "'conda'"  # [unix]
