@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ${SRC_DIR}
+
 if [[ "${target_platform}" == osx-* ]]; then
   if [[ "${target_platform}" == osx-64 ]]; then
     CFLAGS="${CFLAGS} -D_DARWIN_FEATURE_CLOCK_GETTIME=0"
