@@ -1,3 +1,6 @@
+bash -xeu %RECIPE_DIR%\replace-strawberry-perl-paths.sh
+if %ERRORLEVEL% NEQ 0 exit 1
+
 robocopy %SRC_DIR%\perl\ %LIBRARY_PREFIX%\ *.* /E
 if %ERRORLEVEL% GEQ 8 exit 1
 
