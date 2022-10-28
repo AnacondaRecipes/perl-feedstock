@@ -8,12 +8,12 @@ package:
   version: {{ win_version }}   # [win]
 
 source:
-  - url: http://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
+  - url: https://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
     sha256: 57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309                                        # [unix]
     patches:                                                                                                        # [unix]
       - 0001-Use-userelocatableinc-together-with-useshrplib.patch                                                   # [unix]
-  - url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win64]
-    url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-32bit-portable.zip  # [win32]
+  - url: https://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win64]
+    url: https://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-32bit-portable.zip  # [win32]
     sha1: fac226b31461f2392702822052a3a5628917f857                                                                  # [win64]
     sha1: 28bca91cadd6651c2b2463db8587c170bf17f2fa                                                                  # [win32]
     # sha1 hashes published at: http://strawberryperl.com/releases.html
@@ -24,15 +24,13 @@ build:
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5       # [not win]
   run_exports:
     weak:
-      - >-
-        {{ pin_subpackage("perl", max_pin="x.x") }}
-        *_strawberry  # [win]
-        *_perl5       # [not win]
+      - {{ pin_subpackage("perl", max_pin="x.x") }}
+      - \*_strawberry  # [win]
+      - \*_perl5       # [not win]
     noarch:
-      - >-
-        {{ pin_subpackage("perl", max_pin="x") }}
-        *_strawberry  # [win]
-        *_perl5       # [not win]
+      - {{ pin_subpackage("perl", max_pin="x") }}
+      - \*_strawberry  # [win]
+      - \*_perl5       # [not win]
 
 requirements:
   build:
@@ -55,23 +53,22 @@ test:
     - unset LC_CTYPE  # [osx]
     - unset LANG      # [osx]
     - perl --help
-    - |  # [unix]
-      perl -V:cf_by | grep -qF "'conda'"  # [unix]
-      perl -V:cf_email | grep -qF "'conda'"  # [unix]
-      perl -V:perladmin | grep -qF "'conda'"  # [unix]
-      perl -e 'print "$_\n" for @INC' || true  # [osx]
-      perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.site_perl" || true  # [osx]
-      perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.vendor_perl" || true  # [osx]
-      perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.core_perl" || true  # [osx]
-      perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.{{ major_minor_version }}.site_perl" || true  # [osx]
-      perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.{{ major_minor_version }}.vendor_perl" || true  # [osx]
-      perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.{{ major_minor_version }}.core_perl" || true  # [osx]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/site_perl"  # [linux]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/vendor_perl"  # [linux]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/core_perl"  # [linux]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/site_perl"  # [linux]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/vendor_perl"  # [linux]
-      perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/core_perl"  # [linux]
+    - perl -V:cf_by | grep -qF "'conda'"  # [unix]
+    - perl -V:cf_email | grep -qF "'conda'"  # [unix]
+    - perl -V:perladmin | grep -qF "'conda'"  # [unix]
+    - perl -e 'print "$_\n" for @INC' || true  # [osx]
+    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.site_perl" || true  # [osx]
+    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.vendor_perl" || true  # [osx]
+    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.core_perl" || true  # [osx]
+    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.{{ major_minor_version }}.site_perl" || true  # [osx]
+    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.{{ major_minor_version }}.vendor_perl" || true  # [osx]
+    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.{{ major_minor_version }}.core_perl" || true  # [osx]
+    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/site_perl"  # [linux]
+    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/vendor_perl"  # [linux]
+    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/core_perl"  # [linux]
+    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/site_perl"  # [linux]
+    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/vendor_perl"  # [linux]
+    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/core_perl"  # [linux]
     # conda replaces back- by forward slashes during prefix placeholder replacement on installs:
     #   This means our Config.pm and Config_heavy.pl etc. carry mixed back-/forward slashes
     #   which Perl seems to handle well, though.
@@ -86,14 +83,17 @@ test:
     - perl -V:vendorarch | findstr "/C:%PREFIX:\=/%\Library\vendor\lib"  # [win]
 
 about:
-  home: http://www.perl.org/
+  home: https://www.perl.org/
   license: GPL-1.0-or-later OR Artistic-1.0-Perl
   license_file:
     - Artistic  # [unix]
     - Copying   # [unix]
     - licenses/perl/Artistic  # [win]
     - licenses/perl/Copying  # [win]
+  license_url: https://dev.perl.org/licenses/  # [unix]
+  license_url: https://github.com/StrawberryPerl/Perl-Dist-Strawberry/blob/master/LICENSE # [win]
   summary: "The Perl programming language interpreter."
+  license_family: Other
   description: |
     Perl 5 is a highly capable, feature-rich programming language with over 29
     years of development. Perl 5 runs on over 100 platforms from portables to
@@ -109,3 +109,5 @@ extra:
     - mingwandroid
     - isuruf
     - mbargull
+  skip-lints:
+    - missing_doc_source_url
