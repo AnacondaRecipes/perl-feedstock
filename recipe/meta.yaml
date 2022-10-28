@@ -52,7 +52,7 @@ test:
   #   - git
   #   - automake
   commands:
-    -  unset LC_CTYPE  # [osx]
+    - unset LC_CTYPE  # [osx]
     - unset LANG      # [osx]
     - perl --help
     - |  # [unix]
