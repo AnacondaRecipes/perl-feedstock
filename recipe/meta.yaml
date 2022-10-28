@@ -41,6 +41,9 @@ requirements:
     - posix                # [win]
     - m2-patch             # [win]
     - patch                # [not win]
+    - sed                  # [not win]
+    - m2-sed               # [win]
+
   host:
     - libnsl  # [linux]
 
@@ -54,6 +57,7 @@ test:
       perl -V:cf_by | grep -qF "'conda'"  # [unix]
       perl -V:cf_email | grep -qF "'conda'"  # [unix]
       perl -V:perladmin | grep -qF "'conda'"  # [unix]
+      perl -e 'print "$_\n" for @INC'  # [unix]
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/site_perl"  # [unix]
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/vendor_perl"  # [unix]
       perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/core_perl"  # [unix]
