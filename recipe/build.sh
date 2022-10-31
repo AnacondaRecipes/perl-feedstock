@@ -4,7 +4,9 @@
 # world-writable files are not allowed
 chmod -R o-w "${SRC_DIR}"
 
-cp $BUILD_PREFIX/include/ndbm.h $BUILD_PREFIX/include/gdbm-ndbm.h
+ls $BUILD_PREFIX/include/
+
+cp -f $BUILD_PREFIX/include/ndbm.h $BUILD_PREFIX/include/gdbm-ndbm.h
 # export CFLAGS="-I${PREFIX}/include"
 # export LDFLAGS="${LDFLAGS} -L${CONDA_BUILD_SYSROOT}/usr/lib"
 declare -a _config_args
