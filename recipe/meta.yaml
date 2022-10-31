@@ -15,19 +15,19 @@ source:
   sha1: 7996609176451c54864f700ffa299ee81712d8bd                                                                  # [win64]
   sha1: 73564a7cef397c4e0da93612c00fa5f482e652b3                                                                  # [win32]
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
     - {{ compiler('c') }}   # [unix]
     - make                  # [unix]
-    - gdbm                  # [osx and arm64]
+    - gdbm                  # [unix]
 test:
   commands:
     - perl --help
 
 about:
-  home: http://www.perl.org/
+  home: https://www.perl.org/
   license: Perl Artistic
   license_family: Other
   summary: "The Perl programming language interpreter."
