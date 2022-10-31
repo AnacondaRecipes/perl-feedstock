@@ -1,6 +1,5 @@
-{% set unix_version = "5.32.1" %}
+{% set unix_version = "5.34.0" %}
 {% set win_version = unix_version + ".1" %}
-{% set major_minor_version = unix_version.split(".")[:2] | join(".") %}
 
 package:
   name: perl
@@ -8,90 +7,30 @@ package:
   version: {{ win_version }}   # [win]
 
 source:
-  - url: https://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
-    sha256: 57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309                                        # [unix]
-    patches:                                                                                                        # [unix]
-      - 0001-Use-userelocatableinc-together-with-useshrplib.patch                                                   # [unix]
-  - url: https://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win64]
-    sha1: fac226b31461f2392702822052a3a5628917f857                                                                  # [win64]
-    # sha1 hashes published at: http://strawberryperl.com/releases.html
-
+  url: http://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.gz                                                 # [unix]
+  url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win64]
+  url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-32bit-portable.zip  # [win32]
+  sha256: 551efc818b968b05216024fb0b727ef2ad4c100f8cb6b43fab615fa78ae5be9a                                        # [unix]
+  # sha1 hashes published at: http://strawberryperl.com/releases.html
+  sha1: 7996609176451c54864f700ffa299ee81712d8bd                                                                  # [win64]
+  sha1: 73564a7cef397c4e0da93612c00fa5f482e652b3                                                                  # [win32]
 build:
   number: 0
-  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_strawberry  # [win]
-  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5       # [not win]
-  run_exports:
-    weak:
-      - {{ pin_subpackage("perl", max_pin="x.x") }}
-      - \*_strawberry  # [win]
-      - \*_perl5       # [not win]
-    noarch:
-      - {{ pin_subpackage("perl", max_pin="x") }}
-      - \*_strawberry  # [win]
-      - \*_perl5       # [not win]
 
 requirements:
   build:
-    - {{ compiler('c') }}  # [unix]
-    - make                 # [unix]
-    - posix                # [win]
-    - m2-patch             # [win]
-    - patch                # [not win]
-    - sed                  # [not win]
-    - m2-sed               # [win]
-
-  host:
-    - libnsl  # [linux]
-
+    - {{ compiler('c') }}   # [unix]
+    - make                  # [unix]
+    - gdbm                  # [osx and arm64]
 test:
-  # downstreams:
-  #   - git
-  #   - automake
   commands:
-    - unset LC_CTYPE  # [osx]
-    - unset LANG      # [osx]
     - perl --help
-    - perl -V:cf_by | grep -qF "'conda'"  # [unix]
-    - perl -V:cf_email | grep -qF "'conda'"  # [unix]
-    - perl -V:perladmin | grep -qF "'conda'"  # [unix]
-    - perl -e 'print "$_\n" for @INC' || true  # [osx]
-    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.site_perl" || true  # [osx]
-    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.vendor_perl" || true  # [osx]
-    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.core_perl" || true  # [osx]
-    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.{{ major_minor_version }}.site_perl" || true  # [osx]
-    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.{{ major_minor_version }}.vendor_perl" || true  # [osx]
-    - perl -e 'print "$_\n" for @INC' | grep -e "PREFIX.lib.perl5.{{ major_minor_version }}.core_perl" || true  # [osx]
-    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/site_perl"  # [linux]
-    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/vendor_perl"  # [linux]
-    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/core_perl"  # [linux]
-    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/site_perl"  # [linux]
-    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/vendor_perl"  # [linux]
-    - perl -e 'print "$_\n" for @INC' | grep -qxF "${PREFIX}/lib/perl5/{{ major_minor_version }}/core_perl"  # [linux]
-    # conda replaces back- by forward slashes during prefix placeholder replacement on installs:
-    #   This means our Config.pm and Config_heavy.pl etc. carry mixed back-/forward slashes
-    #   which Perl seems to handle well, though.
-    #   refs:
-    #     - https://github.com/conda/conda/blob/4.10.3/conda/core/portability.py#L37-L40
-    #     - https://github.com/conda/conda/pull/2630#discussion_r66468372
-    - perl -V:privlib | findstr "/C:%PREFIX:\=/%\Library\lib"  # [win]
-    - perl -V:archlib | findstr "/C:%PREFIX:\=/%\Library\lib"  # [win]
-    - perl -V:sitelib | findstr "/C:%PREFIX:\=/%\Library\site\lib"  # [win]
-    - perl -V:sitearch | findstr "/C:%PREFIX:\=/%\Library\site\lib"  # [win]
-    - perl -V:vendorlib | findstr "/C:%PREFIX:\=/%\Library\vendor\lib"  # [win]
-    - perl -V:vendorarch | findstr "/C:%PREFIX:\=/%\Library\vendor\lib"  # [win]
 
 about:
-  home: https://www.perl.org/
-  license: GPL-1.0-or-later OR Artistic-1.0-Perl
-  license_file:
-    - Artistic  # [unix]
-    - Copying   # [unix]
-    - licenses/perl/Artistic  # [win]
-    - licenses/perl/Copying  # [win]
-  license_url: https://dev.perl.org/licenses/  # [unix]
-  license_url: https://github.com/StrawberryPerl/Perl-Dist-Strawberry/blob/master/LICENSE # [win]
-  summary: "The Perl programming language interpreter."
+  home: http://www.perl.org/
+  license: Perl Artistic
   license_family: Other
+  summary: "The Perl programming language interpreter."
   description: |
     Perl 5 is a highly capable, feature-rich programming language with over 29
     years of development. Perl 5 runs on over 100 platforms from portables to
@@ -105,7 +44,4 @@ extra:
     - jakirkham
     - msarahan
     - mingwandroid
-    - isuruf
-    - mbargull
-  skip-lints:
-    - missing_doc_source_url
+    - katietz
