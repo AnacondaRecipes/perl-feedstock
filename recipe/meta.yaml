@@ -14,6 +14,7 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}   # [unix]
+    - binutils              # [linux]
     - make                  # [unix]
     - gdbm                  # [unix]
 test:
