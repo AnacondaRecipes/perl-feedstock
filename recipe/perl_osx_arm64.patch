@@ -1,0 +1,26 @@
+Index: work/hints/darwin.sh
+===================================================================
+--- work.orig/hints/darwin.sh
++++ work/hints/darwin.sh
+@@ -301,6 +301,10 @@ case "$osvers" in  # Note: osvers is the
+    # We now use MACOSX_DEPLOYMENT_TARGET, if set, as an override by
+    # capturing its value and adding it to the flags.
+     case "$MACOSX_DEPLOYMENT_TARGET" in
++    11.*)
++      add_macosx_version_min ccflags $MACOSX_DEPLOYMENT_TARGET
++      add_macosx_version_min ldflags $MACOSX_DEPLOYMENT_TARGET
++      ;;
+     10.*)
+       add_macosx_version_min ccflags $MACOSX_DEPLOYMENT_TARGET
+       add_macosx_version_min ldflags $MACOSX_DEPLOYMENT_TARGET
+@@ -327,6 +331,10 @@ EOM
+     # "ProductVersion:    10.11"     "10.11"
+         prodvers=`sw_vers|awk '/^ProductVersion:/{print $2}'|awk -F. '{print $1"."$2}'`
+     case "$prodvers" in
++    11.*(
++      add_macosx_version_min ccflags $prodvers
++      add_macosx_version_min ldflags $prodvers
++      ;;
+     10.*)
+       add_macosx_version_min ccflags $prodvers
+       add_macosx_version_min ldflags $prodvers
