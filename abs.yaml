@@ -2,5 +2,5 @@
 build_parameters:
   - "--suppress-variables"
 channels:
-  - katietz
+  - ktietz
 
