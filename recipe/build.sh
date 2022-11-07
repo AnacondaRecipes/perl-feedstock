@@ -4,8 +4,16 @@
 # world-writable files are not allowed
 chmod -R o-w "${SRC_DIR}"
 
-export CC2=$(basename $CC)
-export GCC2=$(basename $GCC)
+if [[ -n "$CC" ]]; then
+  export CC2=$(basename $CC)
+else
+  export CC2=""
+fi
+if [[ -n "$GCC" ]]; then
+  export GCC2=$(basename $GCC)
+else
+  export GCC2=""
+fi
 
 cp -f $BUILD_PREFIX/include/ndbm.h $BUILD_PREFIX/include/gdbm-ndbm.h
 # export CFLAGS="-I${PREFIX}/include"
