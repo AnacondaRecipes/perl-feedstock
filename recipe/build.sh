@@ -4,8 +4,8 @@
 # world-writable files are not allowed
 chmod -R o-w "${SRC_DIR}"
 
-CC2=$(basename $CC)
-GCC2=$(basename $GCC)
+export CC2=$(basename $CC)
+export GCC2=$(basename $GCC)
 
 cp -f $BUILD_PREFIX/include/ndbm.h $BUILD_PREFIX/include/gdbm-ndbm.h
 # export CFLAGS="-I${PREFIX}/include"
@@ -18,7 +18,7 @@ _config_args+=(-Dcccdlflags="-fPIC ${CFLAGS}")
 _config_args+=(-Dldflags="${LDFLAGS}")
 # .. ran into too many problems with '.' not being on @INC:
 _config_args+=(-Ddefault_inc_excludes_dot=n)
-if [[ -n "${GCC2:-${CC2}}" ]]; then
+if [[ -n "${GCC:-${CC}}" ]]; then
   _config_args+=("-Dcc=${GCC2:-${CC2}}")
 fi
 if [[ ${HOST} =~ .*linux.* ]]; then
