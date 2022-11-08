@@ -4,7 +4,20 @@
 # world-writable files are not allowed
 chmod -R o-w "${SRC_DIR}"
 
-cp -f $BUILD_PREFIX/include/ndbm.h $BUILD_PREFIX/include/gdbm-ndbm.h
+if [[ -n "$CC" ]]; then
+  export CC2=$(basename $CC)
+else
+  export CC2=""
+fi
+if [[ -n "$GCC" ]]; then
+  export GCC2=$(basename $GCC)
+else
+  export GCC2=""
+fi
+
+export PATH=$PREFIX/bin:$PATH
+
+cp -f $PREFIX/include/ndbm.h $PREFIX/include/gdbm-ndbm.h
 # export CFLAGS="-I${PREFIX}/include"
 # export LDFLAGS="${LDFLAGS} -L${CONDA_BUILD_SYSROOT}/usr/lib"
 declare -a _config_args
@@ -16,7 +29,7 @@ _config_args+=(-Dldflags="${LDFLAGS}")
 # .. ran into too many problems with '.' not being on @INC:
 _config_args+=(-Ddefault_inc_excludes_dot=n)
 if [[ -n "${GCC:-${CC}}" ]]; then
-  _config_args+=("-Dcc=${GCC:-${CC}}")
+  _config_args+=("-Dcc=${GCC2:-${CC2}}")
 fi
 if [[ ${HOST} =~ .*linux.* ]]; then
   _config_args+=(-Dlddlflags="-shared ${LDFLAGS}")
@@ -27,15 +40,15 @@ fi
 # linking to system libraries (like GDBM, which is GPL). An
 # alternative is to pass -Dusecrosscompile but that prevents
 # all Configure/run checks which we also do not want.
-if [[ -n ${CONDA_BUILD_SYSROOT} ]]; then
+#if [[ -n ${CONDA_BUILD_SYSROOT} ]]; then
   _config_args+=("-Dsysroot=${CONDA_BUILD_SYSROOT}")
-else
-  if [[ -n ${HOST} ]] && [[ -n ${CC} ]]; then
-    _config_args+=("-Dsysroot=$(dirname $(dirname ${CC}))/$(${CC} -dumpmachine)/sysroot")
-  else
-    _config_args+=("-Dsysroot=${CONDA_BUILD_SYSROOT}/usr")
-  fi
-fi
+#else
+#  if [[ -n ${HOST} ]] && [[ -n ${CC} ]]; then
+#    _config_args+=("-Dsysroot=$(dirname $(dirname ${CC}))/$(${CC} -dumpmachine)/sysroot")
+#  else
+#    _config_args+=("-Dsysroot=${CONDA_BUILD_SYSROOT}/usr")
+#  fi
+#fi
 
 ./Configure "${_config_args[@]}" \
                 -de
