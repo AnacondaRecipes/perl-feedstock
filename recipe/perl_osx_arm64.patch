@@ -17,7 +17,7 @@ Index: work/hints/darwin.sh
      # "ProductVersion:    10.11"     "10.11"
          prodvers=`sw_vers|awk '/^ProductVersion:/{print $2}'|awk -F. '{print $1"."$2}'`
      case "$prodvers" in
-+    11.*(
++    11.*)
 +      add_macosx_version_min ccflags $prodvers
 +      add_macosx_version_min ldflags $prodvers
 +      ;;
