@@ -7,8 +7,9 @@ package:
 source:
   url: https://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.gz                                                 # [unix]
   sha256: 551efc818b968b05216024fb0b727ef2ad4c100f8cb6b43fab615fa78ae5be9a                                        # [unix]
+
 build:
-  number: 3
+  number: 2
   # there is no Windows strawberry release of this version
   skip: True  # [win]
 requirements:
@@ -18,6 +19,14 @@ requirements:
     - {{ compiler('c') }}   # [unix]
     - binutils              # [linux]
     - gdbm                  # [unix]
+  run:
+    - gdbm >=1.18           # [unix]
+    # If something needs to be compiled using Perl's C support,
+    # you need to make sure the compiler is in same PREFIX as the perl
+    # interpreter.
+    # Additional be aware the the used sysroot is hard-coded in perl's
+    # configuration at many places.  So on osx it means that SDK will be
+    # searched at intially used place.  CONDA_BUILD_PREFIX is disregarded.
 test:
   commands:
     - perl --help
