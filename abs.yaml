@@ -1,4 +1,5 @@
-# the conda-build parameters to use
-build_parameters:
-  - "--suppress-variables"
 
+aggregate_check: false
+
+channels:
+  - services
