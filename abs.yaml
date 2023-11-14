@@ -1,5 +1,13 @@
 
+build_parameters:
+  - "--suppress-variables"
+
+upload_without_merge: true
+
 aggregate_check: false
 
 channels:
+  - services
+
+upload_channels:
   - services
