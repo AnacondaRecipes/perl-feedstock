@@ -1,5 +1,5 @@
 {% set name = 'perl' %}
-{% set unix_version = "5.34.1" %}
+{% set unix_version = "5.34.3" %}
 
 package:
   name: {{ name}}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://www.cpan.org/src/5.0/{{ name}}-{{ unix_version }}.tar.gz     # [unix]
-  sha256: 357951a491b0ba1ce3611263922feec78ccd581dddc24a446b033e25acf242a1  # [unix]
+  sha256: 5b12f62863332b2a5f54102af9cdf8c010877e4bf3294911edbd594b2a1e8ede  # [unix]
 
 build:
   number: 0
