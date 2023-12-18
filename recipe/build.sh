@@ -57,9 +57,17 @@ make
 # change permissions again after building
 chmod -R o-w "${SRC_DIR}"
 
+# 2017/6/17:
 # Seems we hit:
 # lib/perlbug .................................................... # Failed test 21 - [perl \#128020] long body lines are wrapped: maxlen 1157 at ../lib/perlbug.t line 154
 # FAILED at test 21
 # https://rt.perl.org/Public/Bug/Display.html?id=128020
+
+# 2023/12/18:
+# t/re/substT ...................................................... FAILED--expected 278 tests, saw 161
+# t/op/utftaint .................................................... FAILED--expected 89 tests, saw 86
+# porting/libperl.t: undefined current object: op.o: at porting/libperl.t line 242, <$nm_fh> line 2.
+# t/porting/libperl ................................................ FAILED--no leader found
 # make test
+
 make install

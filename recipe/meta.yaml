@@ -1,16 +1,18 @@
-{% set unix_version = "5.34.0" %}
+{% set name = 'perl' %}
+{% set unix_version = "5.34.1" %}
 
 package:
-  name: perl
+  name: {{ name}}
   version: {{ unix_version }}
 
 source:
-  url: https://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.gz                                                 # [unix]
-  sha256: 551efc818b968b05216024fb0b727ef2ad4c100f8cb6b43fab615fa78ae5be9a                                        # [unix]
+  url: https://www.cpan.org/src/5.0/{{ name}}-{{ unix_version }}.tar.gz     # [unix]
+  sha256: 357951a491b0ba1ce3611263922feec78ccd581dddc24a446b033e25acf242a1  # [unix]
 
 build:
-  number: 2
+  number: 0
   # there is no Windows strawberry release of this version
+  # https://strawberryperl.com/releases.html
   skip: True  # [win]
 requirements:
   build:
@@ -30,6 +32,7 @@ requirements:
 test:
   commands:
     - perl --help
+    - perl -v
 
 about:
   home: https://www.perl.org/
