@@ -1,5 +1,6 @@
 {% set unix_version = "5.38.2" %}
 {% set win_version = unix_version + ".2" %}
+{% set concat_version = win_version.split('.') | join('') %}
 
 package:
   name: perl
@@ -9,7 +10,7 @@ package:
 source:
   - url: http://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
     sha256: d91115e90b896520e83d4de6b52f8254ef2b70a8d545ffab33200ea9f1cf29e8                                        # [unix]
-  - url: http://strawberryperl.com/download/{{ win_version }}/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win]
+  - url: https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_{{ concat_version }}_64bit/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win]
     sha256: ea451686065d6338d7e4d4a04c9af49f17951d15aa4c2e19ab8cb56fa2373440                                        # [win]
     # sha hashes published at: http://strawberryperl.com/releases.html
 
