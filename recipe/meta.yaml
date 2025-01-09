@@ -16,6 +16,8 @@ source:
 
 build:
   number: 0
+  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_strawberry  # [win]
+  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5       # [not win]
 
 requirements:
   build:
