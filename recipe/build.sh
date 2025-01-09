@@ -17,7 +17,6 @@ fi
 
 export PATH=$PREFIX/bin:$PATH
 
-cp -f $PREFIX/include/ndbm.h $PREFIX/include/gdbm-ndbm.h
 # export CFLAGS="-I${PREFIX}/include"
 # export LDFLAGS="${LDFLAGS} -L${CONDA_BUILD_SYSROOT}/usr/lib"
 declare -a _config_args
