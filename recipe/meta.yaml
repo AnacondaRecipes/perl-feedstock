@@ -1,5 +1,5 @@
-{% set unix_version = "5.38.2" %}
-{% set win_version = unix_version + ".2" %}
+{% set unix_version = "5.40.2" %}
+{% set win_version = unix_version + ".1" %}
 {% set concat_version = win_version.split('.') | join('') %}
 
 package:
@@ -9,10 +9,10 @@ package:
 
 source:
   - url: http://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
-    sha256: d91115e90b896520e83d4de6b52f8254ef2b70a8d545ffab33200ea9f1cf29e8                                        # [unix]
+    sha256: 0551c717458e703ef7972307ab19385edfa231198d88998df74e12226abf563b                                        # [unix]
   - url: https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_{{ concat_version }}_64bit/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win]
-    sha256: ea451686065d6338d7e4d4a04c9af49f17951d15aa4c2e19ab8cb56fa2373440                                        # [win]
-    # sha hashes published at: http://strawberryperl.com/releases.html
+    sha256: 3b4511e891f33c85f2204568e3ee261a2d8a6ad6fb09a0ca70356534c8b290da                                        # [win]
+    # sha hashes published at: http://strawberryperl.com/releases.html (or https://strawberryperl.com/ if the first link is not refreshed)
 
 build:
   number: 0
@@ -53,7 +53,7 @@ about:
     mainframes and is suitable for both rapid prototyping and large scale
     development projects.
   doc_url: https://www.perl.org/docs.html
-  dev_url: https://perl5.git.perl.org/perl.git
+  dev_url: https://github.com/Perl/perl5
 
 extra:
   recipe-maintainers:
