@@ -10,7 +10,7 @@ package:
 source:
   - url: http://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
     sha256: 0551c717458e703ef7972307ab19385edfa231198d88998df74e12226abf563b                                        # [unix]
-  - url: https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_{{ concat_version }}_64bit/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win]
+  - url: https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_{{ concat_version }}_64bit_UCRT/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win]
     sha256: 3b4511e891f33c85f2204568e3ee261a2d8a6ad6fb09a0ca70356534c8b290da                                        # [win]
     # sha hashes published at: http://strawberryperl.com/releases.html (or https://strawberryperl.com/ if the first link is not refreshed)
 
