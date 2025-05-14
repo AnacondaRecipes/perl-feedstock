@@ -8,7 +8,7 @@ package:
   version: {{ win_version }}   # [win]
 
 source:
-  - url: http://www.cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
+  - url: https://cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
     sha256: 0551c717458e703ef7972307ab19385edfa231198d88998df74e12226abf563b                                        # [unix]
   - url: https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_{{ concat_version }}_64bit_UCRT/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win]
     sha256: 7707700d5ad027773b775134fe48cd9610abf221433fcfb68c8eb0ec9c6fde8c                                        # [win]
@@ -61,7 +61,3 @@ extra:
     - msarahan
     - mingwandroid
     - katietz
-  skip-lints:
-    - missing_doc_source_url
-    - missing_license_url
-    - missing_license_file
