@@ -58,5 +58,7 @@ chmod -R o-w "${SRC_DIR}"
 
 # 1/13/2025
 # Still getting several failing tests, see: https://github.com/AnacondaRecipes/perl-feedstock/pull/11#issuecomment-2583033446
+# 5/13/2025
+# Still getting failures, between 5 to 7 over ~2700 tests on each unix platforms.
 # make test
 make install
