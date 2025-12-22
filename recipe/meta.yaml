@@ -1,4 +1,4 @@
-{% set unix_version = "5.40.2" %}
+{% set unix_version = "5.42.0" %}
 {% set win_version = unix_version + ".1" %}
 {% set concat_version = win_version.split('.') | join('') %}
 
@@ -9,9 +9,9 @@ package:
 
 source:
   - url: https://cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
-    sha256: 0551c717458e703ef7972307ab19385edfa231198d88998df74e12226abf563b                                        # [unix]
+    sha256: 73cf6cc1ea2b2b1c110a18c14bbbc73a362073003893ffcedc26d22ebdbdd0c3                                     # [unix]
   - url: https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_{{ concat_version }}_64bit_UCRT/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win]
-    sha256: 7707700d5ad027773b775134fe48cd9610abf221433fcfb68c8eb0ec9c6fde8c                                        # [win]
+    sha256: a1cde185656cf307b51670eed69f648b9eff15b5c518cb136e027c628e650b71                                        # [win]
     # sha hashes published at: http://strawberryperl.com/releases.html (or https://strawberryperl.com/ if the first link is not refreshed)
 
 build:
