@@ -22,6 +22,8 @@ build:
 requirements:
   build:
     - make                  # [unix]
+    - {{ stdlib('c') }}
+    - {{ compiler('c') }}   # [unix]
   host:
     - {{ compiler('c') }}   # [unix]
     - binutils              # [linux]
