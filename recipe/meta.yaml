@@ -25,7 +25,6 @@ requirements:
     - {{ stdlib('c') }}
     - {{ compiler('c') }}   # [unix]
   host:
-    - {{ compiler('c') }}   # [unix]
     - binutils              # [linux]
     # If something needs to be compiled using Perl's C support,
     # you need to make sure the compiler is in same PREFIX as the perl
