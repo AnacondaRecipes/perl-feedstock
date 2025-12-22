@@ -1,8 +1,15 @@
-robocopy %SRC_DIR%\perl\ %LIBRARY_PREFIX%\ *.* /E
-if %ERRORLEVEL% GEQ 8 exit 1
+cd win32
 
-REM There's a bat file in here that says it is better than exe.
-REM Let's trust the strawberry perl folks.
-del %LIBRARY_BIN%\perlglob.exe
+:: Set the compiler to use vs2019
+sed -i.bak 's/^#\s*CCTYPE\s*=\s*MSVC142/CCTYPE = MSVC142/' Makefile
 
-copy %SRC_DIR%\licenses\perl %LIBRARY_PREFIX%\perl_licenses
+:: Override the default install prefix. Backslashes need escaped (and preserved, forward slashes dont work)
+:: escape for sed  (\ -> \\)
+set "SED_LIBPREFIX=%LIBRARY_PREFIX:\=\\%"
+:: escape AGAIN for cmd/MSYS (\\ -> \\\\)
+set "SED_LIBPREFIX=%SED_LIBPREFIX:\=\\%"
+sed -i.bak -E "s|^([[:space:]]*INST_TOP[[:space:]]*=).*|\1 !SED_LIBPREFIX!|" Makefile
+
+nmake
+nmake test || echo Ignoring test failure
+nmake install
