@@ -1,9 +1,11 @@
 robocopy %SRC_DIR%\perl\ %LIBRARY_PREFIX%\ *.* /E
 if %ERRORLEVEL% GEQ 8 exit 1
 
-REM Strawberry Perl depends on many bundled C runtime DLLs (often with "__" suffixes to avoid PATH collisions);
-REM copy the full Strawberry c\bin DLL set so XS modules can load their exact imported DLL names.
-robocopy %SRC_DIR%\c\bin\ %LIBRARY_BIN%\ *.dll /E /NFL /NDL
+REM Strawberry Perl ships many private runtime DLLs with a "__.dll" suffix to avoid PATH collisions.
+REM Perl XS modules are linked against these exact filenames, so we copy only the underscored DLLs
+REM from Strawberry's c\bin into Library\bin to satisfy runtime dependencies without overlapping
+REM with conda-provided libraries.
+robocopy %SRC_DIR%\c\bin\ %LIBRARY_BIN%\ *__.dll /E /NFL /NDL
 if %ERRORLEVEL% GEQ 8 exit 1
 REM Some Strawberry XS modules import Check.xs.dll by basename (no relative path),
 REM so we also place it in Library\bin (on PATH) for the Windows loader.
