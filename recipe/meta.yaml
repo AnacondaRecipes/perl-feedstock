@@ -1,4 +1,4 @@
-{% set unix_version = "5.40.2" %}
+{% set unix_version = "5.42.0" %}
 {% set win_version = unix_version + ".1" %}
 {% set concat_version = win_version.split('.') | join('') %}
 
@@ -8,23 +8,20 @@ package:
   version: {{ win_version }}   # [win]
 
 source:
-  - url: https://cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz                                                 # [unix]
-    sha256: 0551c717458e703ef7972307ab19385edfa231198d88998df74e12226abf563b                                        # [unix]
-  - url: https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_{{ concat_version }}_64bit_UCRT/strawberry-perl-{{ win_version }}-64bit-portable.zip  # [win]
-    sha256: 7707700d5ad027773b775134fe48cd9610abf221433fcfb68c8eb0ec9c6fde8c                                        # [win]
-    # sha hashes published at: http://strawberryperl.com/releases.html (or https://strawberryperl.com/ if the first link is not refreshed)
+  - url: https://cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz
+    sha256: 73cf6cc1ea2b2b1c110a18c14bbbc73a362073003893ffcedc26d22ebdbdd0c3
 
 build:
   number: 0
-  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_strawberry  # [win]
-  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5       # [not win]
+  string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5
 
 requirements:
   build:
     - make                  # [unix]
-  host:
-    - {{ compiler('c') }}   # [unix]
+    - {{ stdlib('c') }}
+    - {{ compiler('c') }}
     - binutils              # [linux]
+    - msys2-sed             # [win]
     # If something needs to be compiled using Perl's C support,
     # you need to make sure the compiler is in same PREFIX as the perl
     # interpreter.
@@ -39,12 +36,9 @@ about:
   home: https://www.perl.org/
   license: GPL-1.0-or-later OR Artistic-1.0-Perl
   license_file:
-    - Artistic  # [unix]
-    - Copying   # [unix]
-    - licenses/perl/Artistic  # [win]
-    - licenses/perl/Copying  # [win]
-  license_url: https://dev.perl.org/licenses/  # [unix]
-  license_url: https://github.com/StrawberryPerl/Perl-Dist-Strawberry/blob/master/LICENSE # [win]
+    - Artistic
+    - Copying
+  license_url: https://dev.perl.org/licenses/
   summary: "The Perl programming language interpreter."
   license_family: Other
   description: |
