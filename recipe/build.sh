@@ -22,7 +22,14 @@ export PATH=$PREFIX/bin:$PATH
 declare -a _config_args
 _config_args+=(-Dprefix="${PREFIX}")
 _config_args+=(-Dusethreads)
-_config_args+=(-Duserelocatableinc)
+# installstyle=lib → $PREFIX/lib/5.x.y and $PREFIX/lib/site_perl/... (matches @INC). The default
+# "perl5" layout uses $PREFIX/lib/perl5/... and can strand site-installed modules off @INC if Config
+# and installers disagree.
+_config_args+=(-Dinstallstyle=lib)
+# Do not use -Duserelocatableinc: it puts relative paths (e.g. ../lib/5.x) on @INC, which Perl
+# resolves from the process cwd. conda-build runs Makefile.PL from $SRC_DIR (.../work), so ../lib
+# points at the build tree, not $PREFIX — core modules (strict, Config) and site_perl break.
+# Prefix relocation is handled by conda; a normal absolute-prefix install is correct here.
 _config_args+=(-Dcccdlflags="-fPIC ${CFLAGS}")
 _config_args+=(-Dldflags="${LDFLAGS}")
 # .. ran into too many problems with '.' not being on @INC:
@@ -62,3 +69,10 @@ chmod -R o-w "${SRC_DIR}"
 # Still getting failures, between 5 to 7 over ~2700 tests on each unix platforms.
 make test || true
 make install
+
+# Strip embedded build-sysroot from Config. -Dsysroot=... is needed during Configure so Perl
+# does not pick up host /usr libs, but the resulting absolute path is written into
+# Config_heavy.pl / CORE/config.sh. EU::MM merges those flags into downstream XS compiles, so a
+# path from *this* build's croot breaks consumers (wrong last --sysroot for GCC, missing
+# system headers). Consumer envs supply their own sysroot via activated CFLAGS.
+python "${RECIPE_DIR}/scrub-sysroot-in-config.py"
