@@ -1,0 +1,33 @@
+From: Eric Lundby <Eric.Lundby@gmail.com>
+Date: Tue, 7 Apr 2026 12:00:00 +0000
+Subject: [PATCH] S_mayberelocate: truncate after NUL-padded prefix
+
+Conda's binary prefix replacement can pad shorter paths with NUL inside the
+fixed-width literal embedded at build time. STR_WITH_LEN still passes the
+compile-time length, so that padding becomes part of the SV and breaks joins
+for module paths. Truncate at the first NUL before using the string.
+
+---
+ perl.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/perl.c b/perl.c
+--- a/perl.c
++++ b/perl.c
+@@ -5001,6 +5001,16 @@
+ 
+     PERL_ARGS_ASSERT_MAYBERELOCATE;
+     assert(len > 0);
++
++    /* After in-place prefix replacement, `dir` may be shorter than the
++     * compile-time STR_WITH_LEN length, with NUL fill.  Do not let that
++     * padding become part of the SV (breaks joins for module paths). */
++    {
++        const char *const nul_pos = (const char *) memchr(dir, '\0', len);
++
++        if (nul_pos)
++            len = (STRLEN)(nul_pos - dir);
++    }
+ 
+     /* I am not convinced that this is valid when PERLLIB_MANGLE is
+        defined to so something (in os2/os2.c), but the code has been

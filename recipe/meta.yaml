@@ -1,6 +1,5 @@
 {% set unix_version = "5.42.2" %}
 {% set win_version = unix_version + ".1" %}
-{% set concat_version = win_version.split('.') | join('') %}
 
 package:
   name: perl
@@ -10,9 +9,13 @@ package:
 source:
   - url: https://cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz
     sha256: 0a585eeb9e363c0f80482ddb3571625250c2c86aeb408853e8ea50805cfb14bb
+    patches:
+      # conda binary prefix replacement pads shorter paths with NUL inside the
+      # fixed-width literal; STR_WITH_LEN still passes sizeof()-1 → broken @INC.
+      - patches/0001-S_mayberelocate-truncate-after-binary-prefix-padding.patch  # [unix]
 
 build:
-  number: 0
+  number: 1
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5
 
 requirements:
@@ -22,15 +25,17 @@ requirements:
     - {{ compiler('c') }}
     - binutils              # [linux]
     - msys2-sed             # [win]
+    - python                # [unix]  # scrub-sysroot-in-config.py after install
     # If something needs to be compiled using Perl's C support,
     # you need to make sure the compiler is in same PREFIX as the perl
     # interpreter.
-    # Additional be aware the the used sysroot is hard-coded in perl's
-    # configuration at many places.  So on osx it means that SDK will be
-    # searched at intially used place.  CONDA_BUILD_PREFIX is disregarded.
 test:
   commands:
     - perl --help
+    # Verify the scrub worked — no build sysroot leaking into Config
+    - 'perl -MConfig -e ''die "sysroot leaked: $Config{ccflags}" if $Config{ccflags} =~ /--sysroot=/'''   # [unix]
+    # Smoke-test that @INC module resolution is intact post-patch
+    - perl -e 'use strict; use warnings; use Config; print "OK\n"'
 
 about:
   home: https://www.perl.org/
