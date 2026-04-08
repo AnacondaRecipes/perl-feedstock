@@ -1,5 +1,5 @@
 anaconda_config_version: 1
 upstream_sources:
   - webpage:
-      url: https://www.perl.org/get.html
-      regex: perl-([\d.]+)\.tar\.gz
+      url: https://www.cpan.org/src/5.0/
+      regex: perl-([\d.]+)\.tar\.(?:gz|xz)
