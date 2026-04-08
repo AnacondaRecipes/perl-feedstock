@@ -9,6 +9,7 @@
 # With -Dinstallstyle=lib, Config lives under lib/<ver>/<arch>/CORE/, not only lib/perl5/.
 
 import os
+import stat
 import sys
 from pathlib import Path
 
@@ -47,7 +48,21 @@ def _scrub_file(path: Path, needle: str) -> None:
     if needle not in text:
         return
 
-    path.write_text(text.replace(needle, ""), encoding="utf-8")
+    new_text = text.replace(needle, "")
+    try:
+        old_mode = path.stat().st_mode
+    except OSError:
+        return
+
+    # make install often leaves Config_heavy.pl / config.sh mode 444; we must write in-place.
+    try:
+        path.chmod(old_mode | stat.S_IWRITE)
+        path.write_text(new_text, encoding="utf-8")
+    finally:
+        try:
+            path.chmod(old_mode)
+        except OSError:
+            pass
 
 
 if __name__ == "__main__":
