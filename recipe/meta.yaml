@@ -32,6 +32,10 @@ requirements:
 test:
   commands:
     - perl --help
+    # Verify the scrub worked — no build sysroot leaking into Config
+    - 'perl -MConfig -e ''die "sysroot leaked: $Config{ccflags}" if $Config{ccflags} =~ /--sysroot=/'''   # [unix]
+    # Smoke-test that @INC module resolution is intact post-patch
+    - perl -e 'use strict; use warnings; use Config; print "OK\n"'
 
 about:
   home: https://www.perl.org/

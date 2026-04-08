@@ -22,10 +22,6 @@ export PATH=$PREFIX/bin:$PATH
 declare -a _config_args
 _config_args+=(-Dprefix="${PREFIX}")
 _config_args+=(-Dusethreads)
-# installstyle=lib → $PREFIX/lib/5.x.y and $PREFIX/lib/site_perl/... (matches @INC). The default
-# "perl5" layout uses $PREFIX/lib/perl5/... and can strand site-installed modules off @INC if Config
-# and installers disagree.
-_config_args+=(-Dinstallstyle=lib)
 # Do not use -Duserelocatableinc: it puts relative paths (e.g. ../lib/5.x) on @INC, which Perl
 # resolves from the process cwd. conda-build runs Makefile.PL from $SRC_DIR (.../work), so ../lib
 # points at the build tree, not $PREFIX — core modules (strict, Config) and site_perl break.
