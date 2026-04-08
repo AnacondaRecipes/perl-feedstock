@@ -32,6 +32,7 @@ _config_args+=(-Dldflags="${LDFLAGS}")
 _config_args+=(-Ddefault_inc_excludes_dot=n)
 if [[ -n "${GCC:-${CC}}" ]]; then
   _config_args+=("-Dcc=${GCC2:-${CC2}}")
+  _config_args+=("-Dld=${GCC2:-${CC2}}") # use compiler driver for XS linking so LDFLAGS with -Wl,* work
 fi
 if [[ ${HOST} =~ .*linux.* ]]; then
   _config_args+=(-Dlddlflags="-shared ${LDFLAGS}")
