@@ -1,4 +1,4 @@
-{% set unix_version = "5.42.2" %}
+{% set unix_version = "5.43.11" %}
 {% set win_version = unix_version + ".1" %}
 
 package:
@@ -7,15 +7,16 @@ package:
   version: {{ win_version }}   # [win]
 
 source:
-  - url: https://cpan.org/src/5.0/perl-{{ unix_version }}.tar.xz
-    sha256: 0a585eeb9e363c0f80482ddb3571625250c2c86aeb408853e8ea50805cfb14bb
+  # CPAN /src/5.0/perl-5.43.11.tar.{xz,gz} not published yet; use upstream tag archive.
+  - url: https://github.com/Perl/perl5/archive/refs/tags/v{{ unix_version }}.tar.gz
+    sha256: 954d3d3ed0f7cde19267d007c57540fb7d873ec9019c2f3573163828a7001010
     patches:
       # conda binary prefix replacement pads shorter paths with NUL inside the
       # fixed-width literal; STR_WITH_LEN still passes sizeof()-1 → broken @INC.
       - patches/0001-S_mayberelocate-truncate-after-binary-prefix-padding.patch  # [unix]
 
 build:
-  number: 1
+  number: 0
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5
 
 requirements:
