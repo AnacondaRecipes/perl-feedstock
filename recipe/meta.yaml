@@ -15,7 +15,7 @@ source:
       - patches/0001-S_mayberelocate-truncate-after-binary-prefix-padding.patch  # [unix]
 
 build:
-  number: 1
+  number: 2
   string: {{ PKG_BUILDNUM }}_h{{ PKG_HASH }}_perl5
 
 requirements:
