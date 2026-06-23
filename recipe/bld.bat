@@ -10,6 +10,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
   "$p = [regex]::Replace($p, '(^\s*INST_TOP\s*=).*$', '${1} ' + $env:LIBRARY_PREFIX, [Text.RegularExpressions.RegexOptions]::Multiline); " ^
   "[System.IO.File]::WriteAllText('Makefile', $p, [System.Text.Encoding]::ASCII)"
 
-nmake
-nmake test || echo Ignoring test failure
-nmake install
+:: Build with architecture-specific parameters
+if "%target_platform%"=="win-arm64" (
+  echo Building for ARM64
+  nmake WIN64=define PROCESSOR_ARCHITECTURE=ARM64
+  nmake WIN64=define PROCESSOR_ARCHITECTURE=ARM64 test || echo Ignoring test failure
+  nmake WIN64=define PROCESSOR_ARCHITECTURE=ARM64 install
+) else (
+  nmake
+  nmake test || echo Ignoring test failure
+  nmake install
+)
