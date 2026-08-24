@@ -1,0 +1,57 @@
+From 033699608e7bf841d14c1f297d8686bf8592be1f Mon Sep 17 00:00:00 2001
+From: Jean-Christophe Morin <jcmorin@anaconda.com>
+Date: Fri, 21 Aug 2026 18:28:25 -0400
+Subject: [PATCH] installperl: do not install build sysroot flags
+
+Configure adds --sysroot=<path> to compiler and linker flags so that the
+Perl build uses the requested headers and libraries.  Config_heavy.pl also
+exposes those build flags to downstream extension builds, where the build
+machine's absolute sysroot is no longer valid.
+
+Keep the flags in the build-tree configuration, but remove the exact
+configured sysroot option from Config_heavy.pl when installing it.
+
+---
+ installperl | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/installperl b/installperl
+index e2006c5561..9151e0f347 100755
+--- a/installperl
++++ b/installperl
+@@ -668,6 +668,8 @@ sub installlib {
+ 	    # HP-UX (at least) needs to maintain execute permissions
+ 	    # on dynamically-loaded libraries.
+             if (copy_if_diff($_, "$installlib/$name")) {
++                scrub_build_sysroot("$installlib/$name")
++                    if $name eq 'Config_heavy.pl';
+                 strip("-S", "$installlib/$name")
+                     if $^O eq 'darwin' and /\.(?:so|$dlext|a)$/;
+                 chmod(/\.(so|$dlext)$/ ? $SO_MODE : $NON_SO_MODE,
+@@ -677,6 +679,23 @@ sub installlib {
+     }
+ }
+ 
++sub scrub_build_sysroot {
++    my ($file) = @_;
++    return if !$Config{sysroot} || $opts{notify};
++
++    open my $fh, '<', $file or die "Can't open $file: $!";
++    local $/;
++    my $contents = <$fh>;
++    close $fh or die "Can't close $file: $!";
++
++    my $sysroot_flag = "--sysroot=$Config{sysroot}";
++    return if $contents !~ s/\Q$sysroot_flag\E//g;
++
++    open $fh, '>', $file or die "Can't open $file: $!";
++    print {$fh} $contents or die "Can't write $file: $!";
++    close $fh or die "Can't close $file: $!";
++}
++
+ # Copy $from to $to, only if $from is different than $to.
+ # Also preserve modification times for .a libraries.
+ # On some systems, if you do
+-- 
+2.55.0
+

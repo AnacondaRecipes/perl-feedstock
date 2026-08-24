@@ -66,10 +66,3 @@ chmod -R o-w "${SRC_DIR}"
 # Still getting failures, between 5 to 7 over ~2700 tests on each unix platforms.
 make test || true
 make install
-
-# Strip embedded build-sysroot from Config. -Dsysroot=... is needed during Configure so Perl
-# does not pick up host /usr libs, but the resulting absolute path is written into
-# Config_heavy.pl / CORE/config.sh. EU::MM merges those flags into downstream XS compiles, so a
-# path from *this* build's croot breaks consumers (wrong last --sysroot for GCC, missing
-# system headers). Consumer envs supply their own sysroot via activated CFLAGS.
-python "${RECIPE_DIR}/scrub-sysroot-in-config.py"
